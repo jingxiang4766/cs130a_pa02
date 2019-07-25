@@ -58,7 +58,7 @@ int main(int argc, char* argv[]) {
 
   int half = (num_nodes)/2 - 1;
   std::vector<std::pair<int,int>> vp;
-  for(int j = 0; j < half; j++){
+  for(int j = 0; j <= half; j++){
     int u = minKey(key, mstSet, num_nodes);
     mstSet[u] = true;
     std::pair <int,int> p;
@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
   std::string skip;
   std::getline(std::cin, skip);
   std::getline(std::cin, skip);
-
+  
   // read in the new edges
   // parse input lines until I find newline
   for(std::string line; std::getline(std::cin, line) && line.compare(""); ) {
@@ -94,7 +94,22 @@ int main(int argc, char* argv[]) {
     graph[to][from] = graph[from][to] = cost;
   }
 
-  for( int j = half; j < num_nodes; j++){
+  //update key value after second read
+  for(int e = 0; e < num_nodes; e++){
+    key[e] = INT_MAX;
+  }
+  for(int q = 0; q < num_nodes; q++){
+    if(mstSet[q]){
+      for(int w = 0; w < num_nodes; w++){
+        if(graph[q][w] && mstSet[w] == false && graph[q][w] < key[w]){
+          parent[w] = q;
+          key[w] = graph[q][w];
+        }
+      }
+    }
+  }
+
+  for(int j = half+1; j < num_nodes; j++){
     int u = minKey(key, mstSet, num_nodes);
     mstSet[u] = true;
     std::pair <int,int> p;
